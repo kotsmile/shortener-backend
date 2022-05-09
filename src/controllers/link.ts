@@ -20,6 +20,7 @@ export async function postCreateHandler(
 
   const link = await createLink(username, url)
   if (!link) return res.sendStatus(400)
+
   return res.send(link.short)
 }
 
