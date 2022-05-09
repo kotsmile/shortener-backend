@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { createUser } from '@/services/db'
-import { UserData } from '@/types'
+import { UserData, AuthUserData } from '@/types'
 import { generateAccessToken } from '@/services/crypto'
 
 export async function postCreateHandler(req: Request<{}, {}, UserData>, res: Response) {
@@ -24,9 +24,6 @@ export async function postLoginHandler(req: Request<{}, {}, UserData>, res: Resp
   res.json(accessToken)
 }
 
-export async function getCheckHandler(
-  req: Request,
-  res: Response<{}, { authUser: string }>
-) {
-  res.status(200).send(res.locals.authUser)
+export async function getCheckHandler(req: Request, res: Response<{}, AuthUserData>) {
+  res.status(200).send(res.locals.username)
 }

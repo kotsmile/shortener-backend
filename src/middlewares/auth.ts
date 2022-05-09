@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
+
 import { verifyJWT, verifyPassword } from '@/services/crypto'
-import { UserData } from '@/types'
 import { getUser } from '@/services/db'
+
+import { UserData, AuthUserData } from '@/types'
 
 export async function authJWT(
   req: Request,
-  res: Response<{}, { authUser: string }>,
+  res: Response<{}, AuthUserData>,
   next: NextFunction
 ) {
   const authHeader = req.headers['authorization']
@@ -14,7 +16,7 @@ export async function authJWT(
   const username = await verifyJWT(authHeader)
   if (!username) return res.sendStatus(403)
 
-  res.locals.authUser = username
+  res.locals.username = username
   next()
 }
 
