@@ -16,7 +16,9 @@ export async function postCreateHandler(
   const { url } = req.body
   if (!url) return res.sendStatus(400)
 
-  const link = await createLink(res.locals.username, url)
+  const { username } = res.locals
+
+  const link = await createLink(username, url)
   if (!link) return res.sendStatus(400)
   return res.send(link.short)
 }
@@ -46,5 +48,5 @@ export async function getLinkHandler(
   const link = await getURL(short['0'])
   if (!link) return res.sendStatus(400)
 
-  return res.send(link.url)
+  return res.redirect(link.url)
 }
