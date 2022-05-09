@@ -1,14 +1,10 @@
 import { Request, Response } from 'express'
-import { createUser, getAllUsers, getUser } from '@/services/db'
-import { verify } from '@/services/crypto'
+import { createUser } from '@/services/db'
+import { UserData } from '@/types'
+import { generateAccessToken } from '@/services/crypto'
 
-type UserData = { username?: string; password?: string }
-
-export async function postCreateUserHandler(
-  req: Request<{}, {}, {}, UserData>,
-  res: Response
-) {
-  const { username, password } = req.query
+export async function postCreateHandler(req: Request<{}, {}, UserData>, res: Response) {
+  const { username, password } = req.body
   if (!username || !password) return res.sendStatus(400)
 
   try {
@@ -20,25 +16,17 @@ export async function postCreateUserHandler(
   return res.status(200).send('User created successfully')
 }
 
-// TODO: remove
-export async function getListUserHandler(req: Request, res: Response) {
-  res.send(await getAllUsers())
-}
-
-// TODO: remove
-export async function getVerifyUserHandler(
-  req: Request<{}, {}, {}, UserData>,
-  res: Response
-) {
-  const { username, password } = req.query
+export async function postLoginHandler(req: Request<{}, {}, UserData>, res: Response) {
+  const { username, password } = req.body
   if (!username || !password) return res.sendStatus(400)
 
-  try {
-    const user = await getUser(username)
-    if (!user) return res.status(400)
-    return res.status(200).send({ result: await verify(password, user.password) })
-  } catch (e) {
-    console.error(e)
-    return res.status(400)
-  }
+  const accessToken = generateAccessToken(username)
+  res.json(accessToken)
+}
+
+export async function getCheckHandler(
+  req: Request,
+  res: Response<{}, { authUser: string }>
+) {
+  res.status(200).send(res.locals.authUser)
 }
