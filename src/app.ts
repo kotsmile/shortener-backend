@@ -16,7 +16,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(helmet())
-app.use(morgan(process.env.SERVER_LOGGER as string))
+app.use(morgan(process.env.SERVER_LOGGER))
 
 app.use(router)
 
