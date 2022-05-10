@@ -1,5 +1,4 @@
 {
-  "serverPort": 3000,
   "morganLogger": ":method :url :status :res[content-length] - :response-time ms",
   "tokenExp": "3h"
 }

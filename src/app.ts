@@ -21,6 +21,6 @@ express()
   .use(morgan(config.morganLogger))
   .use(router)
   .use(requestIp.mw())
-  .listen(config.serverPort, () => {
-    console.log(`Server started on port ${config.serverPort}`)
+  .listen(process.env.PORT, () => {
+    console.log(`Server started on port ${process.env.PORT}`)
   })
