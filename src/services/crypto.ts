@@ -37,7 +37,7 @@ export function generateAccessToken(username: string) {
     {
       data: username,
     },
-    process.env.SECRET_TOKEN,
+    config.secretToken,
     { expiresIn: config.tokenExp }
   )
 }
@@ -47,7 +47,7 @@ export async function verifyJWT(authHeader: string): Promise<string | null> {
   if (token == null) return null
 
   return new Promise((resolve) => {
-    jwt.verify(token, process.env.SECRET_TOKEN, (err, data) => {
+    jwt.verify(token, config.secretToken, (err, data) => {
       if (err) {
         console.error(err)
         resolve(null)
