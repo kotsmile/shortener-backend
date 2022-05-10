@@ -1,5 +1,5 @@
 {
   "morganLogger": ":method :url :status :res[content-length] - :response-time ms",
   "tokenExp": "3h",
-  "secretToken": "478905607ba70fd880ff29bba475edebebd7bfd9609229913519996a91b6a30981681d04347220dc5f62c653d27906ec6edf946c23f070d23aaeecad265c4c9c"
+  "port": 3000
 }

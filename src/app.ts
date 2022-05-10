@@ -14,8 +14,6 @@ import { router } from '@/routes'
 
 import config from '@/config.json'
 
-const port = 3000
-
 express()
   .use(express.json())
   .use(cors())
@@ -23,6 +21,6 @@ express()
   .use(morgan(config.morganLogger))
   .use(router)
   .use(requestIp.mw())
-  .listen(port, () => {
-    console.log(`Server started on port ${port}`)
+  .listen(config.port, () => {
+    console.log(`Server started on port ${config.port}`)
   })
