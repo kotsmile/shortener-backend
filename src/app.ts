@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import requestIp from 'request-ip'
 
 import 'module-alias/register'
 
@@ -17,6 +18,7 @@ express()
   .use(helmet())
   .use(morgan(process.env.SERVER_LOGGER))
   .use(router)
+  .use(requestIp.mw())
   .listen(process.env.SERVER_PORT, () => {
     console.log(`Server started on port ${process.env.SERVER_PORT}`)
   })

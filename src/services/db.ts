@@ -25,12 +25,12 @@ export async function getUserId(username: string): Promise<string | null> {
   return user.id
 }
 
-export async function createLink(username: string, url: string) {
+export async function createLink(username: string, url: string, description?: string) {
   const userId = await getUserId(username)
   if (!userId) return null
 
   return await prisma.link.create({
-    data: { url, userId, short: getRandom() },
+    data: { id: getRandom(), url, userId, description },
   })
 }
 
@@ -39,16 +39,16 @@ export async function getLinks(username: string) {
   if (!userId) return null
 
   return await prisma.link.findMany({
-    select: { url: true, short: true },
     where: { userId },
+    include: { clicks: true },
   })
 }
 
-export async function removeLinks(username: string, urls: string[]) {
+export async function removeLinks(username: string, linkIds: string[]) {
   const userId = await getUserId(username)
   if (!userId) return null
 
-  if (urls.length === 0)
+  if (linkIds.length === 0)
     return await prisma.link.deleteMany({
       where: {
         userId,
@@ -58,13 +58,17 @@ export async function removeLinks(username: string, urls: string[]) {
     return await prisma.link.deleteMany({
       where: {
         userId,
-        short: {
-          in: urls,
+        id: {
+          in: linkIds,
         },
       },
     })
 }
 
-export async function getURL(short: string) {
-  return await prisma.link.findUnique({ select: { url: true }, where: { short } })
+export async function getURL(linkId: string) {
+  return await prisma.link.findUnique({ select: { url: true }, where: { id: linkId } })
+}
+
+export async function newClick(linkId: string, ip?: string) {
+  return await prisma.click.create({ data: { linkId, ip } })
 }

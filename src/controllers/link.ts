@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { AuthUserData } from '@/types'
-import { createLink, getLinks, getURL, removeLinks } from '@/services/db'
+import { AuthUserData, LinkData } from '@/types'
+import { createLink, getLinks, getURL, newClick, removeLinks } from '@/services/db'
 
 export async function getListHandler(_: Request, res: Response<{}, AuthUserData>) {
   const links = await getLinks(res.locals.username)
@@ -10,44 +10,48 @@ export async function getListHandler(_: Request, res: Response<{}, AuthUserData>
 }
 
 export async function postCreateHandler(
-  req: Request<{}, {}, { url?: string }>,
+  req: Request<{}, {}, LinkData>,
   res: Response<{}, AuthUserData>
 ) {
-  const { url } = req.body
+  const { url, description } = req.body
   if (!url) return res.sendStatus(400)
 
   const { username } = res.locals
 
-  const link = await createLink(username, url)
+  const link = await createLink(username, url, description)
   if (!link) return res.sendStatus(400)
 
-  return res.send(link.short)
+  return res.send(link.id)
 }
 
 export async function postRemoveHandler(
-  req: Request<{}, {}, { urls?: string[] }>,
+  req: Request<{}, {}, { linkIds?: string[] }>,
   res: Response<{}, AuthUserData>
 ) {
-  const { urls } = req.body
-  if (!urls) return res.sendStatus(400)
+  const { linkIds } = req.body
+  if (!linkIds) return res.sendStatus(400)
 
   const { username } = res.locals
 
-  const response = await removeLinks(username, urls)
+  const response = await removeLinks(username, linkIds)
   if (!response) return res.sendStatus(400)
 
   return res.json(response)
 }
 
 export async function getLinkHandler(
-  req: Request<{ '0'?: string }, {}, { urls?: string[] }>,
+  req: Request<{ '0'?: string }>,
   res: Response<{}, AuthUserData>
 ) {
-  const short = req.params
-  if (!short['0']) return res.sendStatus(400)
+  const params = req.params
+  if (!params['0']) return res.sendStatus(400)
 
-  const link = await getURL(short['0'])
+  const linkId = params['0']
+
+  const link = await getURL(linkId)
   if (!link) return res.sendStatus(400)
+
+  await newClick(linkId, req.clientIp)
 
   return res.redirect(link.url)
 }
