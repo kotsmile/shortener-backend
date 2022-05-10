@@ -11,7 +11,7 @@ export async function postCreateHandler(req: Request<{}, {}, UserData>, res: Res
     await createUser(username, password)
   } catch (e) {
     console.error(e)
-    return res.status(400).send(e)
+    return res.status(405).send(e)
   }
   return res.status(200).send('User created successfully')
 }

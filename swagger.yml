@@ -1,0 +1,75 @@
+swagger: "2.0"
+info:
+  description: "Shortener link backend"
+  version: "0.0.1"
+  title: "Shortener"
+host: "localhost:3000"
+
+basePath: "/"
+
+tags:
+- name: "user"
+  description: "Operations about user"
+- name: "link"
+  description: "Access to link list"
+- name: "health"
+  description: "Checks health of server"
+
+schemes:
+- "https"
+- "http"
+
+paths:
+  /user/create:
+    post:
+      tags:
+      - "user"
+      summary: "Create new user"
+      description: ""
+      operationId: "createUser"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User data"
+        required: true
+        schema:
+          $ref: "#/definitions/UserData"
+      responses:
+        "405":
+          description: "Invalid input"
+        "200":
+          description: "User created successfully"
+  /user/login:
+  /user/check:
+  /link/list:
+  /link/create:
+  /link/remove:
+  /health:
+    get:
+      tags:
+      - "health"
+      summary: "Returns status"
+      responses:
+        "200": 
+          description: "Default value"
+
+
+
+definitions:
+  Link:
+    type: "object"
+    properties:
+      url:
+        type: "string"
+      short:
+        type: "string"
+  UserData:
+    type: "object"
+    properties:
+      username: 
+        type: "string"
+      password:
+        type: "string"
+      
