@@ -12,13 +12,15 @@ dotenv.config()
 
 import { router } from '@/routes'
 
+import config from '@/config.json'
+
 express()
   .use(express.json())
   .use(cors())
   .use(helmet())
-  .use(morgan(process.env.SERVER_LOGGER))
+  .use(morgan(config.morganLogger))
   .use(router)
   .use(requestIp.mw())
-  .listen(process.env.SERVER_PORT, () => {
-    console.log(`Server started on port ${process.env.SERVER_PORT}`)
+  .listen(config.serverPort, () => {
+    console.log(`Server started on port ${config.serverPort}`)
   })

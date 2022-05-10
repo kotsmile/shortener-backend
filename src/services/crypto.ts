@@ -1,6 +1,8 @@
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 
+import config from '@/config.json'
+
 export function createSalt(size = 16) {
   return crypto.randomBytes(size).toString('hex')
 }
@@ -36,7 +38,7 @@ export function generateAccessToken(username: string) {
       data: username,
     },
     process.env.SECRET_TOKEN,
-    { expiresIn: 60 * 60 }
+    { expiresIn: config.tokenExp }
   )
 }
 
