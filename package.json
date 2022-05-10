@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "concurrently 'tsc -w' 'node-dev --respawn dist/app.js'",
     "build": "tsc -p .",
-    "serve": "node dist/app.js"
+    "serve": "node dist/app.js",
+    "serve:prisma": "npx prisma migrate dev --name init"
   },
   "engines": {
     "node": ">=16.0.0"
