@@ -4,4 +4,5 @@ dist/
 .gitignore
 .git/
 .env
+.env.local
 
